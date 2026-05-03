@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Food Delivery Database App</title>
+</head>
+<body>
+    <h1>Food Delivery Database App</h1>
+
+    <h2>Add New Customer</h2>
+    <form action="/add_customer" method="POST">
+        <input type="text" name="name" placeholder="Enter customer name" required>
+        <button type="submit">Add Customer</button>
+    </form>
+
+        <h2>Add Favorite Restaurant</h2>
+    <form action="/add_favorite" method="POST">
+        <label>Customer:</label>
+        <select name="customer_id" required>
+            {% for customer in customers %}
+            <option value="{{ customer[0] }}">{{ customer[0] }} - {{ customer[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <label>Restaurant:</label>
+        <select name="restaurant_id" required>
+            {% for restaurant in restaurants %}
+            <option value="{{ restaurant[0] }}">{{ restaurant[0] }} - {{ restaurant[1] }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Add Favorite</button>
+    </form>
+
+    <h2>Customers</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Customer ID</th>
+            <th>Name</th>
+            <th>Action</th>
+        </tr>
+        {% for customer in customers %}
+        <tr>
+            <td>{{ customer[0] }}</td>
+            <td>{{ customer[1] }}</td>
+            <td>
+                <form action="/delete_customer/{{ customer[0] }}" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Restaurants</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Restaurant ID</th>
+            <th>Name</th>
+            <th>Zone</th>
+            <th>Category</th>
+            <th>Total Orders</th>
+            <th>Avg Delivery Time</th>
+            <th>Avg Food Rating</th>
+            <th>Avg Delivery Rating</th>
+        </tr>
+        {% for restaurant in restaurants %}
+        <tr>
+            <td>{{ restaurant[0] }}</td>
+            <td>{{ restaurant[1] }}</td>
+            <td>{{ restaurant[2] }}</td>
+            <td>{{ restaurant[3] }}</td>
+            <td>{{ restaurant[4] }}</td>
+            <td>{{ restaurant[5] }}</td>
+            <td>{{ restaurant[6] }}</td>
+            <td>{{ restaurant[7] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Cuisines</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Cuisine ID</th>
+            <th>Cuisine Name</th>
+        </tr>
+        {% for cuisine in cuisines %}
+        <tr>
+            <td>{{ cuisine[0] }}</td>
+            <td>{{ cuisine[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Restaurant-Cuisine Relationships</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Restaurant ID</th>
+            <th>Cuisine ID</th>
+        </tr>
+        {% for rc in restaurant_cuisines %}
+        <tr>
+            <td>{{ rc[0] }}</td>
+            <td>{{ rc[1] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Favorites</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Customer ID</th>
+            <th>Customer Name</th>
+            <th>Restaurant ID</th>
+            <th>Restaurant Name</th>
+            <th>Action</th>
+        </tr>
+        {% for favorite in favorites %}
+        <tr>
+            <td>{{ favorite[0] }}</td>
+            <td>{{ favorite[1] }}</td>
+            <td>{{ favorite[2] }}</td>
+            <td>{{ favorite[3] }}</td>
+            <td>
+                <form action="/delete_favorite/{{ favorite[0] }}/{{ favorite[2] }}" method="POST">
+                    <button type="submit">Remove Favorite</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Orders</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer ID</th>
+            <th>Restaurant ID</th>
+            <th>Order Date/Time</th>
+            <th>Quantity Items</th>
+            <th>Total Amount</th>
+            <th>Delivery Time</th>
+            <th>Payment Mode</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order[0] }}</td>
+            <td>{{ order[1] }}</td>
+            <td>{{ order[2] }}</td>
+            <td>{{ order[3] }}</td>
+            <td>{{ order[4] }}</td>
+            <td>{{ order[5] }}</td>
+            <td>{{ order[6] }}</td>
+            <td>{{ order[7] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2>Reviews</h2>
+    <table border="1" cellpadding="8">
+        <tr>
+            <th>Review ID</th>
+            <th>Order ID</th>
+            <th>Food Rating</th>
+            <th>Delivery Rating</th>
+            <th>Review Date/Time</th>
+        </tr>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review[0] }}</td>
+            <td>{{ review[1] }}</td>
+            <td>{{ review[2] }}</td>
+            <td>{{ review[3] }}</td>
+            <td>{{ review[4] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
