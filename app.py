@@ -80,6 +80,24 @@ def add_customer():
 
     return redirect("/")
 
+@app.route("/update_customer/<int:customer_id>", methods=["POST"])
+def update_customer(customer_id):
+    name = request.form["name"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "UPDATE customer SET name = %s WHERE customer_id = %s;",
+        (name, customer_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
 @app.route("/delete_customer/<int:customer_id>", methods=["POST"])
 def delete_customer(customer_id):
     conn = get_db_connection()
@@ -88,6 +106,123 @@ def delete_customer(customer_id):
     cur.execute(
         "DELETE FROM customer WHERE customer_id = %s;",
         (customer_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/add_cuisine", methods=["POST"])
+def add_cuisine():
+    cuisine_name = request.form["cuisine_name"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "INSERT INTO cuisine (cuisine_name) VALUES (%s);",
+        (cuisine_name,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/update_cuisine/<int:cuisine_id>", methods=["POST"])
+def update_cuisine(cuisine_id):
+    cuisine_name = request.form["cuisine_name"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "UPDATE cuisine SET cuisine_name = %s WHERE cuisine_id = %s;",
+        (cuisine_name, cuisine_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/delete_cuisine/<int:cuisine_id>", methods=["POST"])
+def delete_cuisine(cuisine_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        "DELETE FROM cuisine WHERE cuisine_id = %s;",
+        (cuisine_id,)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/add_restaurant_cuisine", methods=["POST"])
+def add_restaurant_cuisine():
+    restaurant_id = request.form["restaurant_id"]
+    cuisine_id = request.form["cuisine_id"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        INSERT INTO restaurant_cuisine (restaurant_id, cuisine_id)
+        VALUES (%s, %s)
+        ON CONFLICT (restaurant_id, cuisine_id) DO NOTHING;
+        """,
+        (restaurant_id, cuisine_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/delete_restaurant_cuisine/<int:restaurant_id>/<int:cuisine_id>", methods=["POST"])
+def delete_restaurant_cuisine(restaurant_id, cuisine_id):
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        DELETE FROM restaurant_cuisine
+        WHERE restaurant_id = %s AND cuisine_id = %s;
+        """,
+        (restaurant_id, cuisine_id)
+    )
+
+    conn.commit()
+    cur.close()
+    conn.close()
+
+    return redirect("/")
+
+@app.route("/update_review/<int:review_id>", methods=["POST"])
+def update_review(review_id):
+    food_rating = request.form["food_rating"]
+    delivery_rating = request.form["delivery_rating"]
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+
+    cur.execute(
+        """
+        UPDATE review
+        SET food_rating = %s, delivery_rating = %s
+        WHERE review_id = %s;
+        """,
+        (food_rating, delivery_rating, review_id)
     )
 
     conn.commit()
